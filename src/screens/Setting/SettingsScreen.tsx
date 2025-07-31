@@ -7,7 +7,7 @@ export default function SettingsScreen() {
 
   return (
     <View>
-      <Text style={style.textprueba}>Pantalla de Configuración</Text>
+      <Text style={style.textprueba}>Pantalla de Status</Text>
     </View>
   );
 }

@@ -30,9 +30,9 @@ export const TabBar = () => {
             { }
             <TouchableOpacity
                 style={styles.tabButton}
-                onPress={() => navigation.navigate('Configuración')}
+                onPress={() => navigation.navigate('Status')}
             >
-                <Text style={styles.tabText}>pruebas de algo x</Text>
+                <Text style={styles.tabText}>Status de Tarea</Text>
             </TouchableOpacity>
 
             { }
