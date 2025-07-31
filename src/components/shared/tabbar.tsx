@@ -4,13 +4,12 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { RootStackParamList, Task } from '../../infrastructure/type/route';
 
-// Define el tipo de navegación basado en tus rutas
+
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export const TabBar = () => {
     const navigation = useNavigation<NavigationProp>();
 
-    // Tarea de ejemplo
     const exampleTask: Task = {
         id: '1',
         title: 'Tarea de ejemplo',
@@ -20,28 +19,28 @@ export const TabBar = () => {
 
     return (
         <View style={styles.tabBarContainer}>
-            {/* Botón de navegación a Inicio */}
+            { }
             <TouchableOpacity
                 style={styles.tabButton}
-                onPress={() => navigation.navigate('Inicio')}
+                onPress={() => navigation.navigate('ListadeTareas')}
             >
-                <Text style={styles.tabText}>Inicio</Text>
+                <Text style={styles.tabText}>Lista de Tarea</Text>
             </TouchableOpacity>
 
-            {/* Botón de navegación a Configuración */}
+            { }
             <TouchableOpacity
                 style={styles.tabButton}
                 onPress={() => navigation.navigate('Configuración')}
             >
-                <Text style={styles.tabText}>Configuración</Text>
+                <Text style={styles.tabText}>pruebas de algo x</Text>
             </TouchableOpacity>
 
-            {/* Botón de navegación a DetalleTarea con una tarea ejemplo */}
+            { }
             <TouchableOpacity
                 style={styles.tabButton}
                 onPress={() => navigation.navigate('DetalleTarea', { task: exampleTask })}
             >
-                <Text style={styles.tabText}>Detalle</Text>
+                <Text style={styles.tabText}>Detalles de Tareas</Text>
             </TouchableOpacity>
         </View>
     );
@@ -50,21 +49,38 @@ export const TabBar = () => {
 const styles = StyleSheet.create({
     tabBarContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        paddingVertical: 10,
-        backgroundColor: '#fff',
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        backgroundColor: '#ffd9ed',
         borderTopWidth: 1,
-        borderTopColor: '#ccc',
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
+        borderTopColor: '#ffa6e6',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 4,
+        elevation: 6,
     },
+
     tabButton: {
-        padding: 10,
+        flex: 1,
+        backgroundColor: '#5B3CC4',
+        paddingVertical: 14,
+        marginHorizontal: 5,
+        borderRadius: 30,
+        shadowColor: '#5B3CC4',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 4,
+        alignItems: 'center',
     },
+
     tabText: {
-        fontSize: 16,
-        color: '#333',
+        color: '#fff',
+        fontSize: 15,
+        fontWeight: '700',
+        textAlign: 'center'
     },
 });

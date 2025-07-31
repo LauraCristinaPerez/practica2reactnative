@@ -11,3 +11,5 @@ export default function SettingsScreen() {
     </View>
   );
 }
+
+style

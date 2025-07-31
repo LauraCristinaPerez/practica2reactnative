@@ -1,6 +1,6 @@
 // src/navigation/types.ts
 export type RootStackParamList = {
-    Inicio: undefined;
+    ListadeTareas: undefined;
     Configuración: undefined;
     DetalleTarea: { task: Task };
 };

@@ -11,8 +11,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const appNavigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Inicio" id={undefined}>
-        <Stack.Screen name="Inicio" component={HomeScreen} />
+      <Stack.Navigator initialRouteName="ListadeTareas" id={undefined}>
+        <Stack.Screen name="ListadeTareas" component={HomeScreen} />
         <Stack.Screen name="Configuración" component={SettingsScreen} />
         <Stack.Screen name="DetalleTarea" component={TaskDetailScreen} />
       </Stack.Navigator>
