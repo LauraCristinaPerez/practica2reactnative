@@ -1,34 +1,66 @@
-import React from "react";
-import { View, Text, SafeAreaView, StyleSheet } from "react-native";
-import { TabBar } from "../../components/shared/tabbar";
+import React, { useState } from 'react';
+import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
+import { Task } from '../../infrastructure/models/Task';
+import { TaskStatus } from '../../infrastructure/constants/TaskStatus';
+import { TabBar } from '../../components/shared/tabbar';
+import { TaskContext } from '../../components/TaskContext';
+import { useTasks } from './TaskDetailScreen';
 
 
-export default function HomeScreen() {
+
+export default function HomeScreen({ navigation }) {
+
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [responsible, setResponsible] = useState('');
+
+    const { addTask } = useTasks();
+
+    const onAdd = () => {
+        const newTask: Task = {
+            id: Date.now().toString(),
+            title,
+            description,
+            responsible,
+            status: TaskStatus.PENDING
+        };
+        addTask(newTask);
+    };
+
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.container}>
+            <View style={{ padding: 16 }}>
+                <Text style={styles.label}>Título de tarea</Text>
+                <TextInput style={styles.input} value={title} onChangeText={setTitle} />
+
+                <Text style={styles.label}>Descripción de tarea</Text>
+                <TextInput style={styles.input} value={description} onChangeText={setDescription} />
+
+                <Text style={styles.label}>Responsable</Text>
+                <TextInput style={styles.input} value={responsible} onChangeText={setResponsible} />
+
+                <Button title="Agregar tarea" onPress={onAdd} />
+
+            </View>
+
             <TabBar />
-            <Text>Weolcome</Text>
-        </SafeAreaView>
+        </View>
     );
 }
+
 const styles = StyleSheet.create({
-    tabBarContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        paddingVertical: 10,
-        backgroundColor: 'pink',
-        borderTopWidth: 1,
-        borderTopColor: '#ccc',
-        position: 'absolute',
-        bottom: 0,
+    container: {
         width: '100%',
+        height: '100%',
+        backgroundColor: 'white',
+        marginTop: 12,
     },
-    tabButton: {
-        padding: 10,
-    },
-    tabText: {
-        fontSize: 16,
-        color: '#333',
+    label: { fontWeight: 'bold', marginTop: 12 },
+    input: {
+        padding: 8,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        marginBottom: 12,
     },
 });

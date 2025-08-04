@@ -1,9 +1,17 @@
-import React from "react";
-import Navigator from "./src/navigation/AppNavigator";
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+// import { TaskProvider } from './src/components/TaskContext';
+import AppNavigator from './src/navigation/AppNavigator'; // Asegúrate de tener esto creado
 
-function App(): React.JSX.Element {
+export default function App() {
   return (
-    <Navigator></Navigator>
+    // <TaskProvider>
+    <NavigationContainer>
+      <AppNavigator />
+    </NavigationContainer>
+
   );
 }
-export default App;
+
+
+

@@ -11,5 +11,3 @@ export type Task = {
     description: string;
     assignedTo: string;
 };
-
-

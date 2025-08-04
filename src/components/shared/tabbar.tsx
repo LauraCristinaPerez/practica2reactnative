@@ -48,15 +48,18 @@ export const TabBar = () => {
 
 const styles = StyleSheet.create({
     tabBarContainer: {
+        position: 'absolute',
+        bottom: 10,
+        width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: 12,
-        paddingHorizontal: 10,
-        backgroundColor: '#ffd9ed',
+        //paddingHorizontal: 10,
+        backgroundColor: '#ffffffff',
         borderTopWidth: 1,
-        borderTopColor: '#ffa6e6',
-        shadowColor: '#000',
+        borderTopColor: '#9696963c',
+        shadowColor: 'withe',
         shadowOffset: { width: 0, height: -2 },
         shadowOpacity: 0.05,
         shadowRadius: 4,
@@ -65,11 +68,11 @@ const styles = StyleSheet.create({
 
     tabButton: {
         flex: 1,
-        backgroundColor: '#5B3CC4',
+        backgroundColor: '#718cf1ff',
         paddingVertical: 14,
         marginHorizontal: 5,
-        borderRadius: 30,
-        shadowColor: '#5B3CC4',
+        borderRadius: 10,
+        shadowColor: '#a5a5a5ff',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
