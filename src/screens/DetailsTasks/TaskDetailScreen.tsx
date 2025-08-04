@@ -1,10 +1,59 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, } from 'react-native';
 import { Task } from '../../infrastructure/models/Task';
 import { TaskStatus } from '../../infrastructure/constants/TaskStatus';
 import { TabBar } from '../../components/shared/tabbar';
 import { TaskContext } from '../../components/TaskContext';
 import { ListRenderItem } from 'react-native';
+import { TextInput } from 'react-native';
+/*import { EditableText } from '../../components/shared/EditableText';*/
+
+//revisar esta sección que espara editar las tareas
+
+const EditableText = ({ initialText, onSave }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [text, setText] = useState(initialText);
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleSave = () => {
+    onSave(text);
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setText(initialText);
+    setIsEditing(false);
+  };
+
+  return (
+    <View style={styles.container}>
+      {isEditing ? (
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={text}
+            onChangeText={setText}
+            autoFocus
+          />
+          <View style={styles.buttonContainer}>
+            <Text style={[styles.button, styles.saveButton]} onPress={handleSave}>Guardar</Text>
+            <Text style={[styles.button, styles.cancelButton]} onPress={handleCancel}>Cancelar</Text>
+          </View>
+        </View>
+      ) : (
+        <View style={styles.textContainer}>
+          <Text style={styles.text} onPress={handleEdit}>{text}</Text>
+          <Text style={[styles.button, styles.editButton]} onPress={handleEdit}>Editar</Text>
+        </View>
+      )}
+    </View>
+  );
+};
+
+//aquí finaliza lo de ditar tarea
 
 // Hook para acceder al contexto
 export const useTasks = () => {
@@ -142,6 +191,34 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  textContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 
+  inputContainer: {
+    flexDirection: 'column',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 5,
+    marginBottom: 5,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+  },
+  button: {
+    padding: 5,
+    borderRadius: 5,
+    marginRight: 5,
+    color: 'white',
+  },
 
+  saveButton: {
+    backgroundColor: 'green',
+  },
+  cancelButton: {
+    backgroundColor: 'red',
+  },
 });
