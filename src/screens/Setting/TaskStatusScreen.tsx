@@ -51,8 +51,8 @@ export default function TaskStatusScreen() {
   const renderItem: ListRenderItem<Task> = ({ item }) => (
     <View style={styles.card}>
       <Text style={styles.title}>{item.title}</Text>
-      <TouchableOpacity onPress={() => handleStatusChange(item.id, item.status)}>
-        <Text style={[styles.status, getStatusStyle(item.status)]}>
+      <TouchableOpacity onPress={() => handleStatusChange(item.id, item.status as TaskStatus)}>
+        <Text style={[styles.status, getStatusStyle(item.status as TaskStatus)]}>
           {item.status.replace('_', ' ')}
         </Text>
       </TouchableOpacity>
