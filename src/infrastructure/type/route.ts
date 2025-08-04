@@ -1,8 +1,8 @@
 // src/navigation/types.ts
 export type RootStackParamList = {
-    ListadeTareas: undefined;
+    Añadir_Tarea_Especifica: undefined;
     Status: undefined;
-    DetalleTarea: { task: Task };
+    Detalle_De_Tarea_Especifica: { task: Task };
 };
 
 export type Task = {
