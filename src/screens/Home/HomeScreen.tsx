@@ -5,6 +5,9 @@ import { TaskStatus } from '../../infrastructure/constants/TaskStatus';
 import { TabBar } from '../../components/shared/tabbar';
 import { TaskContext } from '../../components/TaskContext';
 import { useTasks } from './TaskDetailScreen';
+import * as Yup from 'yup';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Alert } from 'react-native';
 
 
 
@@ -14,17 +17,32 @@ export default function HomeScreen({ navigation }) {
     const [description, setDescription] = useState('');
     const [responsible, setResponsible] = useState('');
 
+    const taskSchema = Yup.object().shape({
+        title: Yup.string().required('el Titulo de la tarea es obligatorio'),
+        description: Yup.string().required("La descripción es obligatoria"),
+        responsible: Yup.string().required("El responsable es obligatorio"),
+
+    });
+
     const { addTask } = useTasks();
 
-    const onAdd = () => {
-        const newTask: Task = {
-            id: Date.now().toString(),
-            title,
-            description,
-            responsible,
-            status: TaskStatus.PENDING
-        };
-        addTask(newTask);
+    const onAdd = async () => {
+        try {
+            await taskSchema.validate({ title, description, responsible });
+
+            const newTask: Task = {
+                id: Date.now().toString(),
+                title,
+                description,
+                responsible,
+                status: TaskStatus.PENDING
+            };
+            addTask(newTask);
+        } catch (error) {
+            if (error instanceof Yup.ValidationError) {
+                Alert.alert("Error de validación", error.message);
+            }
+        }
     };
 
     return (
