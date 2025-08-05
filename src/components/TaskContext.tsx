@@ -12,6 +12,7 @@ interface TaskContextType {
   tasks: Task[];
   addTask: (task: Task) => void;
   updateStatus: (id: string, status: Task['status']) => void;
+  updateTask: (Etask: Task) => void;
 }
 
 export const TaskContext = createContext<TaskContextType | undefined>(undefined);
@@ -33,8 +34,29 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
     );
   };
 
+  const updateTask = (Etaks: Task) => {
+    setTasks((prev) =>
+      prev.map(task =>
+        task.id === Etaks.id
+          ? {
+            ...task,
+            title: Etaks.title,
+            description: Etaks.description,
+            responsible: Etaks.responsible,
+            status: Etaks.status,
+          }
+          : task
+      )
+    );
+  };
+  const deleteTaskById = (id: string) => {
+    setTasks((prev) => prev.filter(task => task.id !== id));
+  };
+
+
   return (
-    <TaskContext.Provider value={{ tasks, addTask, updateStatus }}>
-      {children}  </TaskContext.Provider>
+    <TaskContext.Provider value={{ tasks, addTask, updateStatus, updateTask }}>
+      {children}
+    </TaskContext.Provider>
   );
 };

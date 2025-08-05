@@ -22,23 +22,15 @@ export const TabBar = () => {
             { }
             <TouchableOpacity
                 style={styles.tabButton}
-                onPress={() => navigation.navigate('ListadeTareas')}
+                onPress={() => navigation.navigate('Añadir_Tarea_Especifica')}
             >
-                <Text style={styles.tabText}>Lista de Tarea</Text>
+                <Text style={styles.tabText}>Añadir Tarea</Text>
             </TouchableOpacity>
 
             { }
             <TouchableOpacity
                 style={styles.tabButton}
-                onPress={() => navigation.navigate('Status')}
-            >
-                <Text style={styles.tabText}>Status de Tarea</Text>
-            </TouchableOpacity>
-
-            { }
-            <TouchableOpacity
-                style={styles.tabButton}
-                onPress={() => navigation.navigate('DetalleTarea', { task: exampleTask })}
+                onPress={() => navigation.navigate('Detalle_De_Tarea_Especifica', { task: exampleTask })}
             >
                 <Text style={styles.tabText}>Detalles de Tareas</Text>
             </TouchableOpacity>
@@ -54,7 +46,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingVertical: 12,
+        paddingVertical: 16,
         //paddingHorizontal: 10,
         backgroundColor: '#ffffffff',
         borderTopWidth: 1,
