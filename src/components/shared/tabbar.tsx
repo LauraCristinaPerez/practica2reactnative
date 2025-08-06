@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 16,
         //paddingHorizontal: 10,
-        backgroundColor: '#ffffffff',
+        backgroundColor: '#F3E2D4',
         borderTopWidth: 1,
         borderTopColor: '#9696963c',
         shadowColor: 'withe',
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
 
     tabButton: {
         flex: 1,
-        backgroundColor: '#718cf1ff',
+        backgroundColor: '#A97954',
         paddingVertical: 14,
         marginHorizontal: 5,
         borderRadius: 10,
@@ -73,9 +73,9 @@ const styles = StyleSheet.create({
     },
 
     tabText: {
-        color: '#fff',
+        color: '#532c2e',
         fontSize: 15,
-        fontWeight: '700',
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'WikyRough',
     },
 });
