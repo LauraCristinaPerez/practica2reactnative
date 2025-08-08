@@ -291,6 +291,6 @@ const styles = StyleSheet.create({
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#016A70'
+    backgroundColor: '#700107ff'
   }
 });
