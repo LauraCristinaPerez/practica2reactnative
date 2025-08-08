@@ -87,10 +87,12 @@ export default function HomeScreen({ navigation }) {
                                 onValueChange={(itemValue) => setResponsible(itemValue)}
                                 style={styles.picker}
                                 dropdownIconColor="#A97954">
+                                <Picker.Item label="" value="" />
                                 <Picker.Item label="Laura" value="Laura" />
                                 <Picker.Item label="Juan" value="Juan" />
                                 <Picker.Item label="Luis" value="Luis" />
                                 <Picker.Item label="Angel" value="Angel" />
+
                             </Picker>
                         </View>
                     </View>

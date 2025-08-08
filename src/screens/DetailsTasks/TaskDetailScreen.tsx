@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, TextInput } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableWithoutFeedback, Alert, TextInput, Animated } from 'react-native';
 import { Task } from '../../infrastructure/models/Task';
 import { TaskStatus } from '../../infrastructure/constants/TaskStatus';
 import { TaskContext } from '../../components/TaskContext';
@@ -17,6 +17,7 @@ const cycleStatus = (status: TaskStatus): TaskStatus => {
       return TaskStatus.PENDING;
   }
 };
+
 export const useTasks = () => {
   const context = useContext(TaskContext);
   if (!context) {
@@ -40,13 +41,15 @@ export default function TaskDetailScreen() {
     setEditedTaskId(null);
     setEditedData({});
   };
+  const handleStatusChange = (id: string, currentStatus: TaskStatus) => {
+    const nextStatus = cycleStatus(currentStatus);
+    updateStatus(id, nextStatus);
+  };
 
   const handleSave = () => {
     if (!editedData.id || !editedData.title || !editedData.description || !editedData.responsible) {
       return Alert.alert('Completa todos los campos');
     }
-    console.log('datos a guardar');
-
     updateTask(editedData as Task);
     handleCancel();
   };
@@ -65,28 +68,79 @@ export default function TaskDetailScreen() {
   const getStatusColor = (status: TaskStatus) => {
     switch (status) {
       case TaskStatus.PENDING:
-        return { color: '#ff4800' };
+        return { color: '#982B1C' };
       case TaskStatus.IN_PROGRESS:
-        return { color: '#0d92fe' };
+        return { color: '#016A70' };
       case TaskStatus.COMPLETED:
-        return { color: '#27b72c' };
+        return { color: '#76885B' };
       default:
         return {};
     }
   };
 
-  const handleStatusChange = (id: string, currentStatus: TaskStatus) => {
-    const nextStatus = cycleStatus(currentStatus);
-    updateStatus(id, nextStatus);
+  const AnimatedButton = ({ label, onPress, color }: { label: string; onPress: () => void; color: string }) => {
+    const anim = new Animated.Value(0);
+
+    const handlePressIn = () => {
+      Animated.timing(anim, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: false
+      }).start();
+    };
+
+    const handlePressOut = () => {
+      Animated.timing(anim, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: false
+      }).start();
+      onPress();
+    };
+
+    const backgroundColor = anim.interpolate({
+      inputRange: [0, 1],
+      outputRange: [color, '#803D3B']
+    });
+
+    return (
+      <TouchableWithoutFeedback onPressIn={handlePressIn} onPressOut={handlePressOut}>
+        <Animated.View style={[styles.editButton, { backgroundColor }]}>
+          <Text style={styles.editButtonText}>{label}</Text>
+        </Animated.View>
+      </TouchableWithoutFeedback>
+    );
   };
 
   const renderItem: ListRenderItem<Task> = ({ item }) => {
     const isEditingThisTask = editedTaskId === item.id;
 
+    const scaleAnim = new Animated.Value(1);
+    const onPressInCard = () => {
+      Animated.spring(scaleAnim, {
+        toValue: 0.80,
+        useNativeDriver: true
+      }).start();
+    };
+    const onPressOutCard = () => {
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        friction: 3,
+        tension: 40,
+        useNativeDriver: true
+      }).start();
+    };
+
     return (
-      <View style={styles.card}>
+
+      <Animated.View
+        style={[styles.card, { transform: [{ scale: scaleAnim }] }]}
+        onTouchStart={onPressInCard}
+        onTouchEnd={onPressOutCard}
+      >
         {isEditingThisTask ? (
           <>
+
             <Text style={styles.label}>Título:</Text>
             <TextInput
               style={styles.input}
@@ -108,118 +162,106 @@ export default function TaskDetailScreen() {
               onChangeText={(text) => setEditedData({ ...editedData, responsible: text })}
             />
 
-            <TouchableOpacity style={styles.editButton} onPress={handleSave}>
-              <Text style={styles.editButtonText}>Aceptar</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.editButton} onPress={handleCancel}>
-              <Text style={styles.editButtonText}>Cancelar</Text>
-            </TouchableOpacity>
+            <View style={styles.buttonsRow}>
+              <AnimatedButton label="Aceptar" onPress={handleSave} color="#74512D" />
+              <AnimatedButton label="Cancelar" onPress={handleCancel} color="#987070" />
+            </View>
           </>
         ) : (
           <>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.text}>
-              <Text style={styles.label}>Descripción:</Text> {item.description}
-            </Text>
-            <Text style={styles.text}>
-              <Text style={styles.label}>Responsable:</Text> {item.responsible}
-            </Text>
-            <Text style={[styles.status, getStatusColor(item.status as TaskStatus)]}>
-              Estado: {item.status.replace('_', ' ')}
-            </Text>
-            <Text style={styles.text}>
-              <Text style={styles.label}>Progreso:</Text> {getProgress(item.status as TaskStatus)}
-            </Text>
+            <View style={styles.headerRow}>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={[styles.status, getStatusColor(item.status as TaskStatus)]}>
+                {item.status.replace('_', ' ')}
+              </Text>
+            </View>
 
-            <TouchableOpacity style={styles.editButton} onPress={() => handleStatusChange(item.id, item.status as TaskStatus)}>
-              <Text style={styles.editButtonText}>Editar Estado</Text>
-            </TouchableOpacity>
+            <View style={styles.centerInfo}>
+              <Text style={styles.text}><Text style={styles.label}>Descripción:</Text> {item.description}</Text>
+              <Text style={styles.text}><Text style={styles.label}>Responsable:</Text> {item.responsible}</Text>
+              <Text style={styles.text}><Text style={styles.label}>Progreso:</Text> {getProgress(item.status as TaskStatus)}</Text>
+            </View>
 
-            <TouchableOpacity style={styles.editButton} onPress={() => handleEdit(item)}>
-              <Text style={styles.editButtonText}>Editar Tarea</Text>
-            </TouchableOpacity>
+            <View style={styles.buttonsRow}>
+              <AnimatedButton label="Editar Estado" onPress={() => handleStatusChange(item.id, item.status as TaskStatus)} color="#74512D" />
+              <AnimatedButton label="Editar Tarea" onPress={() => handleEdit(item)} color="#987070" />
+            </View>
+
           </>
         )}
-      </View>
+      </Animated.View>
     );
+
   };
 
   return (
     <View style={styles.container}>
+
+      <Text style={styles.tittle}>Aquí puedes ver los detalles de tus Tareas</Text>
       <FlatList
         data={tasks}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
     </View>
+
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#f2f2f2' },
+  container: { flex: 1, padding: 16, backgroundColor: '#DFD3C3' },
   card: {
-    backgroundColor: 'withe',
-    borderRadius: 12,
+    backgroundColor: '#F8EDE3',
+    borderRadius: 10,
     padding: 16,
     marginBottom: 16,
-    elevation: 2,
+    elevation: 5
   },
-  title: { fontSize: 18, fontWeight: 'bold', marginBottom: 8 },
-
-  label: { fontWeight: '600' },
-
-  text: { marginBottom: 6 },
-
-  status: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginTop: 8,
-    textTransform: 'capitalize',
-  },
-
-  editButton: {
-    backgroundColor: '#3b92eaff',
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 6,
-    alignSelf: 'flex-end',
-    marginTop: 10,
-  },
-
-  editButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+  tittle: {
     textAlign: 'center',
+    fontFamily: 'Pacifico',
+    fontSize: 35,
+    color: '#733C3C',
+
   },
-  textContainer: {
+  headerRow: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
+  centerInfo: {
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  title: { fontSize: 30, fontFamily: 'Caveat' },
+  label: { fontSize: 16, fontFamily: 'WinkyRough', color: '#C5705D', },
+  text: { marginBottom: 6, textAlign: 'center' },
 
-  inputContainer: {
-    flexDirection: 'column',
+  status: {
+    fontSize: 16,
+    fontFamily: 'WinkyRough',
+    textTransform: 'capitalize',
+  },
+  buttonsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 10,
+  },
+  editButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    elevation: 3,
+  },
+  editButtonText: {
+    color: '#F5EFE6',
+    fontFamily: 'Playwrite',
+    textAlign: 'center',
   },
   input: {
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: '#AF8F6F',
     padding: 5,
     marginBottom: 5,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-  },
-  button: {
-    padding: 5,
-    borderRadius: 5,
-    marginRight: 5,
-    color: 'white',
-  },
-
-  saveButton: {
-    backgroundColor: 'green',
-  },
-  cancelButton: {
-    backgroundColor: 'red',
-  },
+  }
 });

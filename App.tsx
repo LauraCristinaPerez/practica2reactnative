@@ -11,6 +11,8 @@ export default function App() {
 
     Playwrite: require('./src/assets/fonts/PlaywriteAUQLD-VariableFont_wght.ttf'),
     WinkyRough: require('./src/assets/fonts/WinkyRough-Italic-VariableFont_wght.ttf'),
+    Caveat: require('./src/assets/fonts/Caveat-VariableFont_wght.ttf'),
+    Pacifico: require('./src/assets/fonts/Pacifico-Regular.ttf')
   })
   return (
     // <TaskProvider>
